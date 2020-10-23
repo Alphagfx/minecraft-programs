@@ -27,4 +27,4 @@ function Transposer:items(side)
 end
 
 tp = Transposer:new {address = transposerAddr}
-print(tp.items(5))
+print(tp:items(5))
