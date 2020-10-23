@@ -28,7 +28,7 @@ function Transposer:items(side)
     component.invoke(self.address, "getAllStacks", side)
 end
 
-function Transposer:items()
+function Transposer:printItemsOnAllSides()
     for i = 0, 5 do
         print("Items on side " .. i .. " =" .. self:items(i))
     end
