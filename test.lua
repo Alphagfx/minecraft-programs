@@ -1,5 +1,6 @@
 local component = require("component")
 
+---# Util
 Util = {}
 
 --- @param type string
@@ -10,12 +11,19 @@ function Util:find(type)
     end
 end
 
--- Meta class
+function Util:printNewTransposer()
+    local addr = Util.find("transposer")
+    local tp = Transposer:new({address = addr})
+    tp:printItemsOnAllSides()
+end
+---# Util
+
+---# Transposer
 Transposer = {address = nil}
 
 --- @param address string
 --- @return any
-function Transposer:new(o, address)
+function Transposer:new(o)
     o = o or {} -- create object if user does not provide one
     setmetatable(o, self)
     self.__index = self
@@ -33,3 +41,4 @@ function Transposer:printItemsOnAllSides()
         print("Items on side " .. i .. " =" .. self:items(i))
     end
 end
+---# Transposer
