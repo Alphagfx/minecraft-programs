@@ -27,4 +27,6 @@ function Transposer:items(side)
 end
 
 tp = Transposer:new {address = transposerAddr}
-print(tp:items(5))
+for i = 0, 5 do
+    print("Items on side " .. i .. " =" .. tp:items(i))
+end
