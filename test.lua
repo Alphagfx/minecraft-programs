@@ -1,6 +1,7 @@
 local component = require("component")
 
-local transposerAddr
+--- @type string
+local transposerAddr = nil
 
 for address, type in component.list("transposer") do
     transposerAddr = address
