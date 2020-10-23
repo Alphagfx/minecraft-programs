@@ -25,3 +25,6 @@ end
 function Transposer:items(side)
     component.invoke(self.address, "getAllStacks", side)
 end
+
+tp = Transposer:new {address = transposerAddr}
+print(tp.items(5))
