@@ -12,9 +12,8 @@ function Util.find(type)
     end
 end
 
-function Util.printNewTransposer()
-    local addr = Util.find("transposer")
-    local tp = Transposer:new{address = addr}
+--- @param tp Transposer
+function Util.printTransposer(tp)
     for side = 0, 5 do
         print(tp:items(side))
     end
