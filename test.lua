@@ -1,11 +1,13 @@
 local component = require("component")
 
---- @type string
-local transposerAddr = nil
+Util = {}
 
-for address, type in component.list("transposer") do
-    transposerAddr = address
-    break
+--- @param type string
+--- @return string
+function Util:find(type)
+    for address, _ in component.list(type) do
+        return address
+    end
 end
 
 -- Meta class
@@ -26,7 +28,8 @@ function Transposer:items(side)
     component.invoke(self.address, "getAllStacks", side)
 end
 
-tp = Transposer:new {address = transposerAddr}
-for i = 0, 5 do
-    print("Items on side " .. i .. " =" .. tp:items(i))
+function Transposer:items()
+    for i = 0, 5 do
+        print("Items on side " .. i .. " =" .. self:items(i))
+    end
 end
