@@ -1,13 +1,26 @@
-kata = {}
+local component = require("component")
 
-super.name = 'test'
+local transposerAddr
 
---- @param s string
---- @return integer
-function kata.sumOfIntegersInString(s)
-    for i = 1, #s, 1 do
-        print(s)
-    end
+for address, type in component.list("transposer") do
+    transposerAddr = address
+    break
 end
 
-return kata
+-- Meta class
+Transposer = {address = nil}
+
+--- @param address string
+--- @return any
+function Transposer:new(o, address)
+    o = o or {} -- create object if user does not provide one
+    setmetatable(o, self)
+    self.__index = self
+    return o
+end
+
+--- @param side number
+--- @return table
+function Transposer:items(side)
+    component.invoke(self.address, "getAllStacks", side)
+end
