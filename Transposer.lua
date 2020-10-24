@@ -1,3 +1,4 @@
+local log = require("lib.log")
 local component = require("component")
 
 --- @class Transposer
@@ -9,13 +10,13 @@ function Transposer:new(o)
     o = o or {}
     setmetatable(o, self)
     self.__index = self
-    print("Created new Transposer with address", self.address)
+    log.info("Created new Transposer with address '", o.address, "'")
     return o
 end
 
 --- @param side integer
 --- @return table
 function Transposer:items(side)
-    print("Getting all item on side ", side)
+    log.debug("Getting all items on side ", side)
     return component.invoke(self.address, "getAllStacks", side)
 end

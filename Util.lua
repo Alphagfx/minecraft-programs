@@ -1,3 +1,4 @@
+local log = require("lib.log")
 local component = require("component")
 
 --- @class Util
@@ -8,7 +9,7 @@ Util = {}
 --- @return string
 function Util.find(type)
     for address, cType in component.list(type) do
-        print("Found ", cType, "=", address)
+        log.info("Found ", cType, "=", address)
         return address
     end
 end
@@ -16,6 +17,6 @@ end
 --- @param tp Transposer
 function Util.printTransposer(tp)
     for side = 0, 5 do
-        print(tp:items(side))
+        log.info(tp:items(side))
     end
 end
