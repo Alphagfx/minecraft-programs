@@ -9,7 +9,7 @@ Util = {}
 --- @return string
 function Util.find(type)
     for address, cType in component.list(type) do
-        log.info("Found ", cType, "=", address)
+        log.info("Found", cType, "=", address)
         return address
     end
 end
@@ -24,7 +24,7 @@ end
 --- @param itemSlots table
 function Util.convertSlotsToItems(itemSlots)
     local result = {}
-    for i = 1, itemSlots.count do
+    for i = 1, #itemSlots do
         local slot = itemSlots[i]
         local countOfItems, itemType =
             slot.size,
