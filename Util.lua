@@ -7,7 +7,8 @@ Util = {}
 --- @param type string
 --- @return string
 function Util.find(type)
-    for address, _ in component.list(type) do
+    for address, cType in component.list(type) do
+        print("Found ", cType, "=", address)
         return address
     end
 end
