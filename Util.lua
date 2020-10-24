@@ -20,3 +20,22 @@ function Util.printTransposer(tp)
         log.info(tp:items(side))
     end
 end
+
+--- @param itemSlots table
+function Util.convertSlotsToItems(itemSlots)
+    local result = {}
+    for i = 1, itemSlots.count do
+        local slot = itemSlots[i]
+        local countOfItems, itemType =
+            slot.size,
+            {
+                damage = slot.damage,
+                hasTag = slot.hasTag,
+                label = slot.label,
+                maxDamage = slot.maxDamage,
+                name = slot.name
+            }
+        result[itemType] = (result[itemType] or 0) + countOfItems
+    end
+    return result
+end

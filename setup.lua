@@ -7,6 +7,8 @@ local data = {
     {file = "Util.lua", url = gistUrl .. "/raw/Util.lua"},
     {file = "lib/log.lua", url = "https://raw.githubusercontent.com/rxi/log.lua/master/log.lua"}
 }
+
+shell.execute("mkdir lib")
 for _, entry in pairs(data) do
     shell.execute("rm " .. entry.file)
     shell.execute("wget -f " .. entry.url .. " " .. entry.file)
