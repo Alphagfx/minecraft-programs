@@ -5,6 +5,7 @@ local data = {
     {file = "main.lua", url = gistUrl .. "/raw/main.lua"},
     {file = "Transposer.lua", url = gistUrl .. "/raw/Transposer.lua"},
     {file = "Util.lua", url = gistUrl .. "/raw/Util.lua"},
+    {file = "Item.lua", url = gistUrl .. "/raw/Item.lua"},
     {file = "lib/log.lua", url = "https://raw.githubusercontent.com/rxi/log.lua/master/log.lua"}
 }
 
