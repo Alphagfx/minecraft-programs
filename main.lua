@@ -2,8 +2,11 @@ require("Transposer")
 require("Util")
 
 local addr = Util.find("transposer")
-local transposer = Transposer:new {address = addr}
+local transposer = Transposer:new(addr)
 
-Util.printTransposer(transposer)
+local inventories = transposer:inventories()
+
+local result = Util.printTable(inventories)
+print(result)
 
 return transposer

@@ -1,3 +1,9 @@
+--- @class Item
+--- @field damage number
+--- @field hasTag boolean
+--- @field label string
+--- @field maxDamage number
+--- @field name string
 Item = {
     damage = 0,
     hasTag = false,
@@ -6,6 +12,7 @@ Item = {
     name = ""
 }
 
+--- @return Item
 function Item:new(o)
     o = o or {}
     setmetatable(o, self)

@@ -2,22 +2,28 @@ local log = require("lib.log")
 local component = require("component")
 
 --- @class Transposer
---- @param address string
-Transposer = {address = ""}
+--- @field address string
+Transposer = {}
 
 --- @return Transposer
-function Transposer:new(o)
-    o = o or {}
+function Transposer:new(address)
+    --- @type Transposer
+    local o = {}
     setmetatable(o, self)
     self.__index = self
-    log.info("Created new Transposer with address", o.address)
+    o.address = address
+    log.info("Created new Transposer with address", address)
     return o
 end
 
---- @param side integer
 --- @return table
-function Transposer:items(side)
-    log.debug("Getting all items on side", side)
-    local slots = component.invoke(self.address, "getAllStacks", side)
-    return Util.convertSlotsToItems(slots.getAll())
+function Transposer:inventories()
+    local result = {}
+    for side = 1, 6 do
+        local slots, error = component.invoke(self.address, "getAllStacks", side)
+        if not slots == nil then
+            local inventory = Inventory:new(self, side)
+            table.insert(result, inventory)
+        end
+    end
 end

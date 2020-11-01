@@ -14,6 +14,8 @@ function Util.find(type)
     end
 end
 
+--- @param table table
+--- @return string
 function Util.printTable(table)
     local result = "{\n"
     for key, value in pairs(table) do
@@ -28,15 +30,4 @@ function Util.printTransposer(tp)
         local tableStr = Util.printTable(tp:items(side))
         log.info("Side ", side, tableStr)
     end
-end
-
---- @param itemSlots table
-function Util.convertSlotsToItems(itemSlots)
-    local result = {}
-    for i = 1, #itemSlots do
-        local slot = itemSlots[i]
-        local countOfItems, itemType = slot.size, Item:new(slot)
-        result[itemType] = (result[itemType] or 0) + countOfItems
-    end
-    return result
 end
