@@ -1,3 +1,4 @@
+require("Inventory")
 local log = require("lib.log")
 local component = require("component")
 
@@ -19,11 +20,12 @@ end
 --- @return table
 function Transposer:inventories()
     local result = {}
-    for side = 1, 6 do
+    for side = 0, 5 do
         local slots, error = component.invoke(self.address, "getAllStacks", side)
-        if not slots == nil then
+        if not error then
             local inventory = Inventory:new(self, side)
             table.insert(result, inventory)
         end
     end
+    return result
 end

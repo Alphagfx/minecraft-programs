@@ -14,14 +14,22 @@ function Util.find(type)
     end
 end
 
+function Util.objectNewIndex(table, key, value)
+    rawset(table, tostring(key), value)
+end
+
+function Util.objectIndex(table, key)
+    rawget(table, tostring(key))
+end
+
 --- @param table table
 --- @return string
 function Util.printTable(table)
     local result = "{\n"
     for key, value in pairs(table) do
-        result = result + string.format("%s=%s\n", key, value)
+        result = result .. string.format("%s=%s\n", key, value)
     end
-    return result + "}"
+    return result .. "}"
 end
 
 --- @param tp Transposer

@@ -1,10 +1,17 @@
+require("Item")
 local component = require("component")
 local log = require("lib.log")
 
 --- @class Inventory
 --- @field transposer Transposer
 --- @field side number
-Inventory = {}
+Inventory = {
+    __mtItemsList = {
+        __index = Util.objectIndex,
+        __newindex = Util.objectNewIndex,
+        __tostring = Util.printTable
+    }
+}
 
 --- @param transposer Transposer
 --- @param side number
@@ -26,13 +33,13 @@ function Inventory:items()
     if not error then
         local itemSlots = slots.getAll()
         local result = {}
-        result.__tostring = Util.printTable
+        setmetatable(result, self.__mtItemsList)
         for i = 1, #itemSlots do
             local slot = itemSlots[i]
             local countOfItems, itemType = slot.size, Item:new(slot)
             result[itemType] = (result[itemType] or 0) + countOfItems
         end
-        return result -- body
+        return result
     else
         log.error("Failed to get items for", self)
     end
