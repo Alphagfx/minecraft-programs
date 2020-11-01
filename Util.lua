@@ -19,7 +19,7 @@ function Util.objectNewIndex(table, key, value)
 end
 
 function Util.objectIndex(table, key)
-    rawget(table, tostring(key))
+    return rawget(table, tostring(key))
 end
 
 --- @param table table
