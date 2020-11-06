@@ -38,6 +38,11 @@ function Inventory:items()
             local slot = itemSlots[i]
             local countOfItems, itemType = slot.size, Item:new(slot)
             result[itemType] = (result[itemType] or 0) + countOfItems
+            for key, value in pairs(result) do
+                if key.name == "minecraft:air" then
+                    result[key] = nil
+                end
+            end
         end
         return result
     else
@@ -55,16 +60,22 @@ function Inventory:canFit(items)
     end
 
     local tracker = Util.shallowCopy(items)
-    local itemSlots = slots.getAll()
-    while #tracker > 0 do
+    --- @type table<number, Slot>
+    local itemSlots = {}
+    for idx, value in ipairs(slots.getAll()) do
+        itemSlots[idx] = Slot:new(value)
+    end
+    while next(tracker) ~= nil do
         for item, count in pairs(tracker) do
             local spot = Inventory.findSpot(itemSlots, item)
             if spot ~= nil then
-                local toPut = math.min(count, (spot.maxSize - spot.size))
-                itemSlots[spot].size = itemSlots[spot].size + toPut
+                local slot = itemSlots[spot]
+                local toPut = math.min(count, (64 - slot.size))
+                slot.item = item
+                slot.size = slot.size + toPut
                 tracker[item] = tracker[item] - toPut
             else
-                log.error("Not enough space to fit items in", self)
+                log.warn("Not enough space to fit items in", self)
                 return false
             end
         end
@@ -76,13 +87,16 @@ function Inventory:canFit(items)
     end
 end
 
+
 --- @param itemSlots table
 --- @param item Item
 --- @return integer @returns valid  item slot to place item
 function Inventory.findSpot(itemSlots, item)
     for idx, slot in ipairs(itemSlots) do
         local slotItem, slotSize = Item:new(slot)
-        if slotItem == item & slot.size < slot.maxSize then
+        if slotItem == item and slot.size < slot.maxSize then
+            return idx
+        elseif slotItem.name == "minecraft:air" then
             return idx
         end
     end
@@ -90,4 +104,27 @@ end
 
 function Inventory:__tostring()
     return string.format("Inventory{address=%s, side=%s}", self.transposer.address, self.side)
+end
+
+--- @class Slot
+--- @field item Item
+--- @field size number
+--- @field maxSize number
+Slot = {}
+
+--- @param ocSlot table Original Minecraft inventory slot
+--- @return Slot
+function Slot:new(ocSlot)
+    --- @type Slot
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.item = Item:new(ocSlot)
+    o.size = ocSlot.size
+    o.maxSize = ocSlot.maxSize
+    return o
+end
+
+function Slot:__tostring()
+    return string.format("Slot{size=%s, maxSize=%s, item=%s}", self.size, self.maxSize, self.item)
 end
