@@ -88,15 +88,14 @@ function Inventory:canFit(items)
 end
 
 
---- @param itemSlots table
+--- @param itemSlots table<number,Slot>
 --- @param item Item
 --- @return integer @returns valid  item slot to place item
 function Inventory.findSpot(itemSlots, item)
     for idx, slot in ipairs(itemSlots) do
-        local slotItem, slotSize = Item:new(slot)
-        if slotItem == item and slot.size < slot.maxSize then
+        if slot.item == item and slot.size < slot.maxSize then
             return idx
-        elseif slotItem.name == "minecraft:air" then
+        elseif slot.item.name == "minecraft:air" then
             return idx
         end
     end
