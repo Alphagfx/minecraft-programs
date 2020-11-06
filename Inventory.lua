@@ -85,6 +85,7 @@ function Inventory:canFit(items)
             end
         end
     end
+    return true
 end
 
 
