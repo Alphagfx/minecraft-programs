@@ -39,3 +39,14 @@ function Util.printTransposer(tp)
         log.info("Side ", side, tableStr)
     end
 end
+
+--- Creates shallow copy of input table
+--- @param table table
+--- @return table
+function Util.shallowCopy(table)
+    local copy = {}
+    for key, value in pairs(table) do
+        copy[key] = value
+    end
+    return copy
+end

@@ -4,13 +4,7 @@
 --- @field label string
 --- @field maxDamage number
 --- @field name string
-Item = {
-    damage = 0,
-    hasTag = false,
-    label = "",
-    maxDamage = 0,
-    name = ""
-}
+Item = {}
 
 --- @return Item
 function Item:new(o)

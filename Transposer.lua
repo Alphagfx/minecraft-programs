@@ -17,7 +17,7 @@ function Transposer:new(address)
     return o
 end
 
---- @return table
+--- @return Inventory[]
 function Transposer:inventories()
     local result = {}
     for side = 0, 5 do

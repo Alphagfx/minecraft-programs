@@ -26,7 +26,7 @@ function Inventory:new(transposer, side)
     return o
 end
 
---- @return Item[]
+--- @return table<Item,number>
 function Inventory:items()
     log.debug("Getting all items on side", self.side)
     local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
@@ -41,12 +41,51 @@ function Inventory:items()
         end
         return result
     else
-        log.error("Failed to get items for", self)
+        log.error("Failed to get items for", self, "because of", error)
     end
 end
 
+--- @param items table<Item,number>
+--- @return boolean
 function Inventory:canFit(items)
-    -- body
+    local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
+    if error then
+        log.error("Failed to find spot for items for", self, "because of", error)
+        return false
+    end
+
+    local tracker = Util.shallowCopy(items)
+    local itemSlots = slots.getAll()
+    while #tracker > 0 do
+        for item, count in pairs(tracker) do
+            local spot = Inventory.findSpot(itemSlots, item)
+            if spot ~= nil then
+                local toPut = math.min(count, (spot.maxSize - spot.size))
+                itemSlots[spot].size = itemSlots[spot].size + toPut
+                tracker[item] = tracker[item] - toPut
+            else
+                log.error("Not enough space to fit items in", self)
+                return false
+            end
+        end
+        for key, value in pairs(tracker) do
+            if value == 0 then
+                tracker[key] = nil
+            end
+        end
+    end
+end
+
+--- @param itemSlots table
+--- @param item Item
+--- @return integer @returns valid  item slot to place item
+function Inventory.findSpot(itemSlots, item)
+    for idx, slot in ipairs(itemSlots) do
+        local slotItem, slotSize = Item:new(slot)
+        if slotItem == item & slot.size < slot.maxSize then
+            return idx
+        end
+    end
 end
 
 function Inventory:__tostring()
