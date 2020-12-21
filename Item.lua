@@ -6,6 +6,7 @@
 --- @field name string
 Item = {}
 
+--- @param o Item
 --- @return Item
 function Item:new(o)
     o = o or {}

@@ -1,4 +1,6 @@
 require("Item")
+require("Ticket")
+require("Slot")
 local component = require("component")
 local log = require("lib.log")
 
@@ -50,21 +52,75 @@ function Inventory:items()
     end
 end
 
---- @param items table<Item,number>
---- @return boolean
-function Inventory:canFit(items)
+--- @return table<number,Slot> array of inventory slots, where key is index and value is slot
+function Inventory:slots()
     local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
     if error then
         log.error("Failed to find spot for items for", self, "because of", error)
         return false
     end
-
-    local tracker = Util.shallowCopy(items)
     --- @type table<number, Slot>
     local itemSlots = {}
     for idx, value in ipairs(slots.getAll()) do
         itemSlots[idx] = Slot:new(value)
     end
+    return itemSlots
+end
+
+--- @param items table<Item,number>
+--- @return boolean
+function Inventory:contains(items)
+    local invItems = self:items()
+    for item, count in pairs(items) do
+        local invItem = invItems[item]
+        if invItem == nil or invItem < count then
+            return false
+        end
+    end
+    return true
+end
+
+--- @param items table<Item,number>
+--- @param target Inventory
+function Inventory:transferItemsTo(items, target)
+    assert(self.transposer.address == target.transposer.address, "Inventories do not have common transposer")
+    assert(self:contains(items), "" .. self .. " does not contain " .. tostring(items))
+    assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
+    --local sources = self:send(items)
+    --local targets = target:receive(items)
+    for item, count in pairs(items) do
+        for i = 1, count do
+            local tIdx, tSlot = target:findSlotToPut(item)
+            local sIdx, sSlot = self:findItem(item)
+            component.invoke(self.transposer.address, "transferItem", self.side, target.side, 1, sIdx, tIdx)
+        end
+    end
+end
+
+--- @param items table<Item,number>
+--- @return Ticket[]
+function Inventory:send(items)
+    assert(self:contains(items), "" .. self .. " does not contain " .. tostring(items))
+    local currentSlots = self:slots()
+    for item, count in pairs(items) do
+        for idx, v in ipairs() do
+
+        end
+    end
+end
+
+--- @param items table<Item,number>
+--- @return Ticket[]
+function Inventory:receive(items)
+    -- body
+end
+
+--- @param items table<Item,number>
+--- @return boolean
+function Inventory:canFit(items)
+    local tracker = Util.shallowCopy(items)
+    --- @type table<number, Slot>
+    local itemSlots = self:slots()
     while next(tracker) ~= nil do
         for item, count in pairs(tracker) do
             local spot = Inventory.findSpot(itemSlots, item)
@@ -89,9 +145,36 @@ function Inventory:canFit(items)
 end
 
 
+--- @param item Item
+--- @return number,Slot returns next slot with this item
+function Inventory:findItem(item)
+    local slots = self:slots()
+    for idx, slot in ipairs(slots) do
+        if slot.item == item then
+            return idx, slot
+        end
+    end
+end
+
+--- @param item Item
+--- @return number,Slot next slot to put this item
+function Inventory:findSlotToPut(item)
+    local slots = self:slots()
+    for idx, slot in ipairs(slots) do
+        if slot.item == item and slot.size < slot.maxSize then
+            return idx, slot
+        end
+    end
+    for idx, slot in ipairs(slots) do
+        if slot.item.name == "minecraft:air" then
+            return idx, slot
+        end
+    end
+end
+
 --- @param itemSlots table<number,Slot>
 --- @param item Item
---- @return integer @returns valid  item slot to place item
+--- @return number @returns valid  item slot to place item
 function Inventory.findSpot(itemSlots, item)
     for idx, slot in ipairs(itemSlots) do
         if slot.item == item and slot.size < slot.maxSize then
@@ -104,27 +187,4 @@ end
 
 function Inventory:__tostring()
     return string.format("Inventory{address=%s, side=%s}", self.transposer.address, self.side)
-end
-
---- @class Slot
---- @field item Item
---- @field size number
---- @field maxSize number
-Slot = {}
-
---- @param ocSlot table Original Minecraft inventory slot
---- @return Slot
-function Slot:new(ocSlot)
-    --- @type Slot
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
-    o.item = Item:new(ocSlot)
-    o.size = ocSlot.size
-    o.maxSize = ocSlot.maxSize
-    return o
-end
-
-function Slot:__tostring()
-    return string.format("Slot{size=%s, maxSize=%s, item=%s}", self.size, self.maxSize, self.item)
 end
