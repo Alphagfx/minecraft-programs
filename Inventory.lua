@@ -52,8 +52,8 @@ function Inventory:slots()
     --- @type table<number, Slot>
     local resultSlots = {}
     setmetatable(resultSlots, self.__mtItemsList)
-    for idx, value in ipairs(slots.getAll()) do
-        resultSlots[idx] = Slot:new(value)
+    for _, value in ipairs(slots.getAll()) do
+        table.insert(resultSlots, Slot:new(value))
     end
     return resultSlots
 end
@@ -79,7 +79,7 @@ function Inventory:transferItemsTo(items, target)
     assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
     for item, count in pairs(items) do
         for i = 1, count do
-            local tIdx, tSlot = target:findSlotToPut(item)
+            local tIdx, tSlot = target.findSlot(target:slots(), item)
             local sIdx, sSlot = self:findItem(item)
             component.invoke(self.transposer.address, "transferItem", self.side, target.side, 1, sIdx, tIdx)
         end
@@ -94,7 +94,7 @@ function Inventory:canFit(items)
     local itemSlots = self:slots()
     while next(tracker) ~= nil do
         for item, count in pairs(tracker) do
-            local spot = Inventory.findSpot(itemSlots, item)
+            local spot = Inventory.findSlot(itemSlots, item)
             if spot ~= nil then
                 local slot = itemSlots[spot]
                 local toPut = math.min(count, (64 - slot.size))
@@ -128,8 +128,7 @@ end
 
 --- @param item Item
 --- @return number,Slot next slot to put this item
-function Inventory:findSlotToPut(item)
-    local slots = self:slots()
+function Inventory.findSlot(slots, item)
     for idx, slot in ipairs(slots) do
         if slot.item == item and slot.size < slot.maxSize then
             return idx, slot
@@ -138,19 +137,6 @@ function Inventory:findSlotToPut(item)
     for idx, slot in ipairs(slots) do
         if slot.item.name == "minecraft:air" then
             return idx, slot
-        end
-    end
-end
-
---- @param itemSlots table<number,Slot>
---- @param item Item
---- @return number @returns valid  item slot to place item
-function Inventory.findSpot(itemSlots, item)
-    for idx, slot in ipairs(itemSlots) do
-        if slot.item == item and slot.size < slot.maxSize then
-            return idx
-        elseif slot.item.name == "minecraft:air" then
-            return idx
         end
     end
 end
