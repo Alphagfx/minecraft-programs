@@ -9,8 +9,8 @@ local log = require("lib.log")
 --- @field side number
 Inventory = {
     __mtItemsList = {
-        __index = Util.objectIndex,
-        __newindex = Util.objectNewIndex,
+        __index = Util.equalIndex,
+        __newindex = Util.equalNewIndex,
         __tostring = Util.printTable
     }
 }
@@ -94,9 +94,8 @@ function Inventory:canFit(items)
     local itemSlots = self:slots()
     while next(tracker) ~= nil do
         for item, count in pairs(tracker) do
-            local spot = Inventory.findSlot(itemSlots, item)
-            if spot ~= nil then
-                local slot = itemSlots[spot]
+            local _, slot = Inventory.findSlot(itemSlots, item)
+            if slot ~= nil then
                 local toPut = math.min(count, (64 - slot.size))
                 slot.item = item
                 slot.size = slot.size + toPut
@@ -126,6 +125,7 @@ function Inventory:findItem(item)
     end
 end
 
+--- @param slots table<number,Slot>
 --- @param item Item
 --- @return number,Slot next slot to put this item
 function Inventory.findSlot(slots, item)

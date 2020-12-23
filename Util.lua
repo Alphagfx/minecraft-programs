@@ -22,6 +22,24 @@ function Util.objectIndex(table, key)
     return rawget(table, tostring(key))
 end
 
+function Util.equalIndex(table, key)
+    for presentKey, _ in pairs(table) do
+        if presentKey == key then
+            key = presentKey
+        end
+    end
+    return rawget(table, key)
+end
+
+function Util.equalNewIndex(table, key, value)
+    for presentKey, _ in pairs(table) do
+        if presentKey == key then
+            key = presentKey
+        end
+    end
+    return rawset(table, key, value)
+end
+
 --- @param table table
 --- @return string
 function Util.printTable(table)

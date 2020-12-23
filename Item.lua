@@ -6,12 +6,18 @@
 --- @field name string
 Item = {}
 
---- @param o Item
+--- @param item Item
 --- @return Item
-function Item:new(o)
-    o = o or {}
+function Item:new(item)
+    --- @type Item
+    local o = {}
     setmetatable(o, self)
     self.__index = self
+    o.damage = item.damage
+    o.hasTag = item.hasTag
+    o.label = item.label
+    o.maxDamage = item.maxDamage
+    o.name = item.name
     return o
 end
 
