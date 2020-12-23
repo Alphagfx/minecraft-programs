@@ -16,7 +16,7 @@ function Item:new(o)
 end
 
 function Item:__eq(obj)
-    if self and obj and #self == #obj then
+    if self and type(obj) == "table" and #self == #obj then
         for key, value in pairs(self) do
             if obj[key] ~= value then
                 return false
@@ -28,11 +28,11 @@ end
 
 function Item:__tostring()
     return string.format(
-        "{damage=%s, hasTag=%s, label=%s, maxDamage=%s, name=%s}",
-        self.damage,
-        self.hasTag,
-        self.label,
-        self.maxDamage,
-        self.name
+            "{damage=%s, hasTag=%s, label=%s, maxDamage=%s, name=%s}",
+            self.damage,
+            self.hasTag,
+            self.label,
+            self.maxDamage,
+            self.name
     )
 end

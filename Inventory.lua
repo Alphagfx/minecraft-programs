@@ -1,5 +1,5 @@
+require("Util")
 require("Item")
-require("Ticket")
 require("Slot")
 local component = require("component")
 local log = require("lib.log")
@@ -30,41 +30,32 @@ end
 
 --- @return table<Item,number>
 function Inventory:items()
-    log.debug("Getting all items on side", self.side)
-    local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
-    if not error then
-        local itemSlots = slots.getAll()
-        local result = {}
-        setmetatable(result, self.__mtItemsList)
-        for i = 1, #itemSlots do
-            local slot = itemSlots[i]
-            local countOfItems, itemType = slot.size, Item:new(slot)
-            result[itemType] = (result[itemType] or 0) + countOfItems
-            for key, value in pairs(result) do
-                if key.name == "minecraft:air" then
-                    result[key] = nil
-                end
-            end
+    local resultItems = {}
+    setmetatable(resultItems, self.__mtItemsList)
+    for _, slot in ipairs(self:slots()) do
+        local countOfItems, item = slot.size, slot.item
+        if item.name ~= "minecraft:air" then
+            resultItems[item] = (resultItems[item] or 0) + countOfItems
+            log.debug("Added", countOfItems, item.name)
         end
-        return result
-    else
-        log.error("Failed to get items for", self, "because of", error)
     end
+    return resultItems
 end
 
 --- @return table<number,Slot> array of inventory slots, where key is index and value is slot
 function Inventory:slots()
     local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
     if error then
-        log.error("Failed to find spot for items for", self, "because of", error)
+        log.error("Failed to get slots of", self, "because of", error)
         return false
     end
     --- @type table<number, Slot>
-    local itemSlots = {}
+    local resultSlots = {}
+    setmetatable(resultSlots, self.__mtItemsList)
     for idx, value in ipairs(slots.getAll()) do
-        itemSlots[idx] = Slot:new(value)
+        resultSlots[idx] = Slot:new(value)
     end
-    return itemSlots
+    return resultSlots
 end
 
 --- @param items table<Item,number>
@@ -86,8 +77,6 @@ function Inventory:transferItemsTo(items, target)
     assert(self.transposer.address == target.transposer.address, "Inventories do not have common transposer")
     assert(self:contains(items), "" .. self .. " does not contain " .. tostring(items))
     assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
-    --local sources = self:send(items)
-    --local targets = target:receive(items)
     for item, count in pairs(items) do
         for i = 1, count do
             local tIdx, tSlot = target:findSlotToPut(item)
@@ -95,24 +84,6 @@ function Inventory:transferItemsTo(items, target)
             component.invoke(self.transposer.address, "transferItem", self.side, target.side, 1, sIdx, tIdx)
         end
     end
-end
-
---- @param items table<Item,number>
---- @return Ticket[]
-function Inventory:send(items)
-    assert(self:contains(items), "" .. self .. " does not contain " .. tostring(items))
-    local currentSlots = self:slots()
-    for item, count in pairs(items) do
-        for idx, v in ipairs() do
-
-        end
-    end
-end
-
---- @param items table<Item,number>
---- @return Ticket[]
-function Inventory:receive(items)
-    -- body
 end
 
 --- @param items table<Item,number>
@@ -143,7 +114,6 @@ function Inventory:canFit(items)
     end
     return true
 end
-
 
 --- @param item Item
 --- @return number,Slot returns next slot with this item

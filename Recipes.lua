@@ -1,7 +1,7 @@
 require("Item")
 
 local minecraft = {
-    glowstone_block = Item:new { damage=0, hasTag=false, label="", maxDamage=0, name = "minecraft:glowstone_block" }
+    glowstone_block = Item:new { damage = 0, hasTag = false, label = "Glowstone", maxDamage = 0, name = "minecraft:glowstone" }
 }
 local enderio = {
     double_capacitor = { name = "enderio:item_basic_capacitor", damage = 1 },
@@ -12,8 +12,8 @@ local recipes = {
     {
         name = "<recipe name>",
         items = {
-            [minecraft.glowstone_block]=1,
-            [enderio.double_capacitor]=2
+            [minecraft.glowstone_block] = 1,
+            [enderio.double_capacitor] = 2
         },
         result = {
             [enderio.octadic_capacitor] = 1

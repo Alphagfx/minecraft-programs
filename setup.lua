@@ -8,7 +8,6 @@ local data = {
     {file = "Util.lua", url = gistUrl .. "/raw/Util.lua"},
     {file = "Item.lua", url = gistUrl .. "/raw/Item.lua"},
     {file = "Slot.lua", url = gistUrl .. "/raw/Slot.lua"},
-    {file = "Ticket.lua", url = gistUrl .. "/raw/Ticket.lua"},
     {file = "Recipes.lua", url = gistUrl .. "/raw/Recipes.lua"},
     {file = "lib/log.lua", url = "https://raw.githubusercontent.com/rxi/log.lua/master/log.lua"}
 }

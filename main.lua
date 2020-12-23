@@ -16,18 +16,24 @@ print("Inventory2:", inventories[2]:items())
 
 print("Can fit inv1 in inv2", inventories[1]:canFit(inventories[2]:items()))
 
-
 local source = inventories[1]
 local target = inventories[2]
 while true do
     for _, recipe in ipairs(recipes) do
-        if source:contains(recipe.items) and target:canFit(recipe) then
+        if source:contains(recipe.items) and target:canFit(recipe.items) then
             source:transferItemsTo(recipe.items, target)
             while not target:contains(recipe.result) do
                 os.sleep(10)
                 log.info("Waiting for result", recipe.result)
             end
             target:transferItemsTo(recipe.result, source)
+        else
+            if not source:contains(recipe.items) then
+                log.debug(source, "does not contain", recipe.items)
+            end
+            if not target:canFit(recipe.items) then
+                log.debug(target, "can not fit", recipe.items)
+            end
         end
     end
     log.debug("Sleeping...")

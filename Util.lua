@@ -27,7 +27,7 @@ end
 function Util.printTable(table)
     local result = "{\n"
     for key, value in pairs(table) do
-        result = result .. string.format("%s=%s\n", key, value)
+        result = result .. string.format("\t%s=%s\n", key, value)
     end
     return result .. "}"
 end
