@@ -22,13 +22,15 @@ function Item:new(item)
 end
 
 function Item:__eq(obj)
-    if self and type(obj) == "table" and #self == #obj then
-        for key, value in pairs(self) do
-            if obj[key] ~= value then
-                return false
-            end
-        end
+    if self and type(obj) == "table" and #self == #obj
+            and self.damage == obj.damage
+            and self.hasTag == obj.hasTag
+            and self.label == obj.label
+            and self.maxDamage == obj.maxDamage
+            and self.name == obj.name then
         return true
+    else
+        return false
     end
 end
 

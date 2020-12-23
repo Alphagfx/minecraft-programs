@@ -75,7 +75,7 @@ end
 --- @param target Inventory
 function Inventory:transferItemsTo(items, target)
     assert(self.transposer.address == target.transposer.address, "Inventories do not have common transposer")
-    assert(self:contains(items), "" .. self .. " does not contain " .. tostring(items))
+    assert(self:contains(items), "" .. tostring(self) .. " does not contain " .. tostring(items))
     assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
     for item, count in pairs(items) do
         for i = 1, count do
