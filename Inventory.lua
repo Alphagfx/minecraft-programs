@@ -30,31 +30,36 @@ end
 
 --- @return table<Item,number>
 function Inventory:items()
+    log.trace("Collect items in", self)
+    --- @type table<Item,number>
     local resultItems = {}
     setmetatable(resultItems, self.__mtItemsList)
     for _, slot in ipairs(self:slots()) do
         local countOfItems, item = slot.size, slot.item
         if item.name ~= "minecraft:air" then
             resultItems[item] = (resultItems[item] or 0) + countOfItems
-            log.debug("Added", countOfItems, item.name)
+            log.trace("Add", countOfItems, item)
         end
     end
+    log.trace("Total items:", #resultItems)
     return resultItems
 end
 
 --- @return table<number,Slot> array of inventory slots, where key is index and value is slot
 function Inventory:slots()
+    log.trace("Collect slots in", self)
     local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
     if error then
-        log.error("Failed to get slots of", self, "because of", error)
-        return false
+        error("Failed to get slots of" .. self .. "because of" .. error)
     end
     --- @type table<number, Slot>
     local resultSlots = {}
     setmetatable(resultSlots, self.__mtItemsList)
     for _, value in ipairs(slots.getAll()) do
         table.insert(resultSlots, Slot:new(value))
+        log.trace("Add slot", value)
     end
+    log.trace("Total slots:", #resultSlots)
     return resultSlots
 end
 
@@ -65,15 +70,18 @@ function Inventory:contains(items)
     for item, count in pairs(items) do
         local invItem = invItems[item]
         if invItem == nil or invItem < count then
+            log.trace("Inventory", self, "does not contain", items)
             return false
         end
     end
+    log.trace("Inventory", self, "contains", items)
     return true
 end
 
 --- @param items table<Item,number>
 --- @param target Inventory
 function Inventory:transferItemsTo(items, target)
+    log.trace("Transfer", items, "from", self, "to", target)
     assert(self.transposer.address == target.transposer.address, "Inventories do not have common transposer")
     assert(self:contains(items), "" .. tostring(self) .. " does not contain " .. tostring(items))
     assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
@@ -81,6 +89,7 @@ function Inventory:transferItemsTo(items, target)
         for i = 1, count do
             local tIdx, tSlot = target.findSlot(target:slots(), item)
             local sIdx, sSlot = self:findItem(item)
+            log.trace("Transfer", item, "from", sIdx, "to", tIdx)
             component.invoke(self.transposer.address, "transferItem", self.side, target.side, 1, sIdx, tIdx)
         end
     end
@@ -101,16 +110,18 @@ function Inventory:canFit(items)
                 slot.size = slot.size + toPut
                 tracker[item] = tracker[item] - toPut
             else
-                log.warn("Not enough space to fit items in", self)
+                log.trace(self, "can not fit", items)
                 return false
             end
         end
         for key, value in pairs(tracker) do
             if value == 0 then
+                log.trace("Remove", key, "from tracker")
                 tracker[key] = nil
             end
         end
     end
+    log.trace(self, "can fit", items)
     return true
 end
 

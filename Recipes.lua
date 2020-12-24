@@ -1,7 +1,9 @@
 require("Item")
+require("Util")
 
 local minecraft = {
-    glowstone_block = Item:new { damage = 0, hasTag = false, label = "Glowstone", maxDamage = 0, name = "minecraft:glowstone" }
+    glowstone_block = Item:new { damage = 0, hasTag = false, label = "Glowstone", maxDamage = 0, name = "minecraft:glowstone" },
+    wooden_sword = Item:new { damage = 0, hasTag = false, label = "Wooden Sword", maxDamage = 59, name = "minecraft:wooden_sword" }
 }
 local enderio = {
     double_capacitor = { name = "enderio:item_basic_capacitor", damage = 1 },
@@ -9,6 +11,11 @@ local enderio = {
 }
 
 local recipes = {
+    {
+        name = "Test",
+        items = { [minecraft.glowstone_block] = 1 },
+        result = { [minecraft.wooden_sword] = 1 }
+    },
     {
         name = "<recipe name>",
         items = {
@@ -20,5 +27,7 @@ local recipes = {
         }
     }
 }
+
+setmetatable(recipes, { __tostring = Util.printTable })
 
 return recipes

@@ -13,7 +13,7 @@ function Transposer:new(address)
     setmetatable(o, self)
     self.__index = self
     o.address = address
-    log.info("Created new Transposer with address", address)
+    log.info("Create new Transposer with address", address)
     return o
 end
 
@@ -21,7 +21,7 @@ end
 function Transposer:inventories()
     local result = {}
     for side = 0, 5 do
-        local slots, error = component.invoke(self.address, "getAllStacks", side)
+        local _, error = component.invoke(self.address, "getAllStacks", side)
         if not error then
             local inventory = Inventory:new(self, side)
             table.insert(result, inventory)

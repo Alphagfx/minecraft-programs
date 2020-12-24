@@ -36,11 +36,11 @@ end
 
 function Item:__tostring()
     return string.format(
-            "{damage=%s, hasTag=%s, label=%s, maxDamage=%s, name=%s}",
-            self.damage,
-            self.hasTag,
+            "{name=%s, label=%s, damage=%s, maxDamage=%s, hasTag=%s}",
+            self.name,
             self.label,
+            self.damage,
             self.maxDamage,
-            self.name
+            self.hasTag
     )
 end
