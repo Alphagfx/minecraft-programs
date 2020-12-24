@@ -28,6 +28,11 @@ local recipes = {
     }
 }
 
-setmetatable(recipes, { __tostring = Util.printTable })
+local mt = { __tostring = Util.printTable }
+
+setmetatable(recipes, mt)
+for _, recipe in ipairs(recipes) do
+    setmetatable(recipe, mt)
+end
 
 return recipes

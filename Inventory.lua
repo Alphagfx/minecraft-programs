@@ -41,13 +41,12 @@ function Inventory:items()
             log.trace("Add", countOfItems, item)
         end
     end
-    log.trace("Total items:", #resultItems)
     return resultItems
 end
 
 --- @return table<number,Slot> array of inventory slots, where key is index and value is slot
 function Inventory:slots()
-    log.trace("Collect slots in", self)
+    log.debug("Collect slots in", self)
     local slots, error = component.invoke(self.transposer.address, "getAllStacks", self.side)
     if error then
         error("Failed to get slots of" .. self .. "because of" .. error)
@@ -56,10 +55,11 @@ function Inventory:slots()
     local resultSlots = {}
     setmetatable(resultSlots, self.__mtItemsList)
     for _, value in ipairs(slots.getAll()) do
-        table.insert(resultSlots, Slot:new(value))
-        log.trace("Add slot", value)
+        local slot = Slot:new(value)
+        log.trace("Add slot", slot)
+        table.insert(resultSlots, slot)
     end
-    log.trace("Total slots:", #resultSlots)
+    log.debug("Total slots:", #resultSlots)
     return resultSlots
 end
 
@@ -70,18 +70,18 @@ function Inventory:contains(items)
     for item, count in pairs(items) do
         local invItem = invItems[item]
         if invItem == nil or invItem < count then
-            log.trace("Inventory", self, "does not contain", items)
+            log.debug(self, "does not contain", items)
             return false
         end
     end
-    log.trace("Inventory", self, "contains", items)
+    log.debug(self, "contains", items)
     return true
 end
 
 --- @param items table<Item,number>
 --- @param target Inventory
 function Inventory:transferItemsTo(items, target)
-    log.trace("Transfer", items, "from", self, "to", target)
+    log.info("Transfer", items, "from", self, "to", target)
     assert(self.transposer.address == target.transposer.address, "Inventories do not have common transposer")
     assert(self:contains(items), "" .. tostring(self) .. " does not contain " .. tostring(items))
     assert(target:canFit(items), "" .. tostring(target) .. " can not fit " .. tostring(items))
@@ -110,7 +110,7 @@ function Inventory:canFit(items)
                 slot.size = slot.size + toPut
                 tracker[item] = tracker[item] - toPut
             else
-                log.trace(self, "can not fit", items)
+                log.debug(self, "can not fit", items)
                 return false
             end
         end
@@ -121,7 +121,7 @@ function Inventory:canFit(items)
             end
         end
     end
-    log.trace(self, "can fit", items)
+    log.debug(self, "can fit", items)
     return true
 end
 
