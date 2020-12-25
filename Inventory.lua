@@ -70,11 +70,11 @@ function Inventory:contains(items)
     for item, count in pairs(items) do
         local invItem = invItems[item]
         if invItem == nil or invItem < count then
-            log.debug(self, "does not contain", items)
+            log.trace(self, "does not contain", items)
             return false
         end
     end
-    log.debug(self, "contains", items)
+    log.trace(self, "contains", items)
     return true
 end
 
@@ -110,7 +110,7 @@ function Inventory:canFit(items)
                 slot.size = slot.size + toPut
                 tracker[item] = tracker[item] - toPut
             else
-                log.debug(self, "can not fit", items)
+                log.trace(self, "can not fit", items)
                 return false
             end
         end
@@ -121,7 +121,7 @@ function Inventory:canFit(items)
             end
         end
     end
-    log.debug(self, "can fit", items)
+    log.trace(self, "can fit", items)
     return true
 end
 
