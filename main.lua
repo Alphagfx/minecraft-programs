@@ -8,34 +8,29 @@ local transposer = Transposer:new(addr)
 
 local inventories = transposer:inventories()
 
-local result = Util.printTable(inventories)
-print(result)
-
-print("Inventory1:", inventories[1]:items())
-print("Inventory2:", inventories[2]:items())
-
-print("Can fit inv1 in inv2", inventories[1]:canFit(inventories[2]:items()))
-
 local source = inventories[1]
 local target = inventories[2]
 while true do
     for _, recipe in ipairs(recipes) do
         if source:contains(recipe.items) and target:canFit(recipe.items) then
+            log.info("Crafting", recipe.name)
             source:transferItemsTo(recipe.items, target)
+            log.info("Waiting for result...")
             while not target:contains(recipe.result) do
+                log.trace("No result yet, sleeping for", 10, "seconds")
                 os.sleep(10)
-                log.info("Waiting for result", recipe.result)
             end
             target:transferItemsTo(recipe.result, source)
+            log.info(recipe.name, "crafting complete")
         else
             if not source:contains(recipe.items) then
-                log.debug(source, "does not contain", recipe.items)
+                log.debug("Recipe", recipe.name, ": source does not contain", recipe.items)
             end
             if not target:canFit(recipe.items) then
-                log.debug(target, "can not fit", recipe.items)
+                log.debug("Recipe", recipe.name, ": target can not fit", recipe.items)
             end
         end
     end
     log.debug("Sleeping...")
-    os.sleep(60)
+    os.sleep(10)
 end

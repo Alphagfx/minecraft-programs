@@ -1,13 +1,17 @@
 require("Item")
 require("Util")
 
+local mt = { __tostring = Util.printTable }
+
 local minecraft = {
     glowstone_block = Item:new { damage = 0, hasTag = false, label = "Glowstone", maxDamage = 0, name = "minecraft:glowstone" },
-    wooden_sword = Item:new { damage = 0, hasTag = false, label = "Wooden Sword", maxDamage = 59, name = "minecraft:wooden_sword" }
+    wooden_sword = Item:new { damage = 0, hasTag = false, label = "Wooden Sword", maxDamage = 59, name = "minecraft:wooden_sword" },
+    __metatable = mt
 }
 local enderio = {
     double_capacitor = { name = "enderio:item_basic_capacitor", damage = 1 },
-    octadic_capacitor = { name = "enderio:item_basic_capacitor", damage = 2 }
+    octadic_capacitor = { name = "enderio:item_basic_capacitor", damage = 2 },
+    __metatable = mt
 }
 
 local recipes = {
@@ -28,11 +32,11 @@ local recipes = {
     }
 }
 
-local mt = { __tostring = Util.printTable }
-
 setmetatable(recipes, mt)
-for _, recipe in ipairs(recipes) do
+for _, recipe in pairs(recipes) do
     setmetatable(recipe, mt)
+    setmetatable(recipe.items, mt)
+    setmetatable(recipe.result, mt)
 end
 
 return recipes
