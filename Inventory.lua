@@ -70,7 +70,7 @@ function Inventory:contains(items)
     for item, count in pairs(items) do
         local invItem = invItems[item]
         if invItem == nil or invItem < count then
-            log.trace(self, "does not contain", items)
+            log.trace(self, "does not contain", item)
             return false
         end
     end

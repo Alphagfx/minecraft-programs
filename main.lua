@@ -12,7 +12,7 @@ local source = inventories[1]
 local target = inventories[2]
 while true do
     log.info("Source", source, "\n", source:items())
-    log.target("Target", target, "\n", target:items())
+    log.info("Target", target, "\n", target:items())
     for _, recipe in ipairs(recipes) do
         if source:contains(recipe.items) and target:canFit(recipe.items) then
             log.info("Crafting", recipe.name)
