@@ -83,7 +83,7 @@ local natura = {
 
 local enderio = {
     basic_capacitor = Item:new { name = "enderio:item_basic_capacitor", label = "Basic Capacitor", damage = 0, maxDamage = 0, hasTag = false },
-    double_capacitor = Item:new { name = "enderio:item_basic_capacitor", label = "Double-Layer", damage = 1, maxDamage = 0, hasTag = false },
+    double_capacitor = Item:new { name = "enderio:item_basic_capacitor", label = "Double-Layer Capacitor", damage = 1, maxDamage = 0, hasTag = false },
     octadic_capacitor = Item:new { name = "enderio:item_basic_capacitor", label = "Octadic Capacitor", damage = 2, maxDamage = 0, hasTag = false },
 
     silver_capacitor = Item:new { name = "enderio:item_capacitor_silver", label = "Silver Capacitor", damage = 0, maxDamage = 0, hasTag = false },
