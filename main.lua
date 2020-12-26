@@ -30,7 +30,7 @@ function craft(recipe, source, buffer, target, output)
         os.sleep(10)
     end
     log.info(recipe.name, "crafting complete, transferring to output")
-    target:transferItemsTo(recipe.items, output)
+    target:transferItemsTo(recipe.result, output)
 end
 
 local addr = Util.find("transposer")
