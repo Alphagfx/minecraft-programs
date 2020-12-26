@@ -48,7 +48,7 @@ while true do
     log.info("Target", target, "\n", target:items())
     log.info("Output", output, "\n", output:items())
     for _, recipe in ipairs(recipes) do
-        craft(recipe, source, buffer, target)
+        craft(recipe, source, buffer, target, output)
     end
     log.debug("Sleeping...")
     os.sleep(10)
