@@ -27,6 +27,8 @@ local minecraft = {
 
     vine = Item:new { name = "minecraft:vine", label = "Vines", damage = 0, maxDamage = 0, hasTag = false },
 
+    prismarine_crystals = Item:new { name = "minecraft:prismarine_crystals", label = "Prismarine Crystals", damage = 0, maxDamage = 0, hasTag = false },
+
     __metatable = mt
 }
 
@@ -90,11 +92,15 @@ local enderio = {
     energetic_silver_capacitor = Item:new { name = "enderio:item_capacitor_energetic_silver", label = "Endergetic Silver Capacitor", damage = 0, maxDamage = 0, hasTag = false },
     vivid_capacitor = Item:new { name = "enderio:item_capacitor_vivid", label = "Endergised Capacitor", damage = 0, maxDamage = 0, hasTag = false },
 
+    crystalline_capacitor = Item:new { name = "enderio:item_capacitor_crystalline", label = "Crystalline Capacitor", damage = 0, maxDamage = 0, hasTag = false },
+
     energetic_alloy = Item:new { name = "enderio:item_alloy_ingot", label = "Energetic Alloy Ingot", damage = 1, maxDamage = 0, hasTag = false },
     vibrant_alloy = Item:new { name = "enderio:item_alloy_ingot", label = "Vibrant Alloy Ingot", damage = 2, maxDamage = 0, hasTag = false },
 
     energetic_silver = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Energetic Silver Ingot", damage = 5, maxDamage = 0, hasTag = false },
     vivid_alloy = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Vivid Alloy Ingot", damage = 6, maxDamage = 0, hasTag = false },
+
+    crystalline_alloy = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Crystalline Alloy Ingot", damage = 1, maxDamage = 0, hatTag = false },
 
     __metatable = mt
 }
@@ -199,6 +205,15 @@ local recipes = {
             [minecraft.glowstone_block] = 1
         },
         result = { [enderio.vivid_capacitor] = 1 }
+    },
+    {
+        name = "Crystalline Capacitor (Silver)",
+        items = {
+            [enderio.vivid_capacitor] = 2,
+            [enderio.crystalline_alloy] = 2,
+            [minecraft.prismarine_crystals] = 1
+        },
+        result = { [enderio.crystalline_capacitor] = 1 }
     }
 }
 
