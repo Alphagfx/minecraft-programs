@@ -67,15 +67,23 @@ end
 --- @return boolean
 function Inventory:contains(items)
     local invItems = self:items()
+    local missingItems = {}
+    setmetatable(missingItems, self.__mtItemsList)
+    local contains = true
     for item, count in pairs(items) do
         local invItem = invItems[item]
         if invItem == nil or invItem < count then
-            log.trace(self, "does not contain", item)
-            return false
+            missingItems[item] = count - (invItem or 0)
+            contains = false
         end
     end
-    log.trace(self, "contains", items)
-    return true
+    if contains then
+        log.trace(self, "contains", items)
+        return true
+    else
+        log.debug(self, "does not contain", missingItems)
+        return false
+    end
 end
 
 --- @param items table<Item,number>
