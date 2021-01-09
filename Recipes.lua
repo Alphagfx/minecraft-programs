@@ -100,7 +100,7 @@ local enderio = {
     energetic_silver = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Energetic Silver Ingot", damage = 5, maxDamage = 0, hasTag = false },
     vivid_alloy = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Vivid Alloy Ingot", damage = 6, maxDamage = 0, hasTag = false },
 
-    crystalline_alloy = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Crystalline Alloy Ingot", damage = 1, maxDamage = 0, hatTag = false },
+    crystalline_alloy = Item:new { name = "enderio:item_alloy_endergy_ingot", label = "Crystalline Alloy Ingot", damage = 1, maxDamage = 0, hasTag = false },
 
     __metatable = mt
 }
