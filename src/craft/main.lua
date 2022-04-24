@@ -1,7 +1,7 @@
-require("Transposer")
-require("Util")
+require("craft.Transposer")
+require("craft.Util")
 local log = require("lib.log")
-local recipes = require("Recipes")
+local recipes = require("craft.Recipes")
 
 function craft(recipe, source, buffer, target, output)
     log.debug("Check recipe", recipe.name, "can be crafted")

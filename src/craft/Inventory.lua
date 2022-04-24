@@ -1,6 +1,6 @@
-require("Util")
-require("Item")
-require("Slot")
+require("craft.Util")
+require("craft.Item")
+require("craft.Slot")
 local component = require("component")
 local log = require("lib.log")
 

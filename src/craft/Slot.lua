@@ -1,4 +1,4 @@
-require("Item")
+require("craft.Item")
 
 --- @class Slot
 --- @field item Item

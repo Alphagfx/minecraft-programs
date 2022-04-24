@@ -1,5 +1,5 @@
-require("Item")
-require("Util")
+require("craft.Item")
+require("craft.Util")
 
 local mt = { __tostring = Util.printTable }
 

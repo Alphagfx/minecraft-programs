@@ -1,4 +1,4 @@
-require("Inventory")
+require("craft.Inventory")
 local log = require("lib.log")
 local component = require("component")
 
