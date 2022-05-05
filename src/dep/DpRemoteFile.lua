@@ -1,22 +1,25 @@
-require("util")
-require("dep.DpRemoteFileOC")
-require("dep.DpRemoteFileLinux")
-
 --- @class DpRemoteFile : Dependency
---- @field href string
+--- @field url string
 --- @field path string
-DpRemoteFile = {}
+local DpRemoteFile = {}
 
---- @param href string
+--- @param url string
 --- @param path string
+--- @param fetch function
 --- @return DpRemoteFile
-function DpRemoteFile:new(href, path)
-    local osName = osName()
-    if osName == "Linux" then
-        return DpRemoteFileLinux:new(href, path)
-    elseif osName == "OpenOS" then
-        return DpRemoteFileOC:new(href, path)
-    else
-        error("OS " .. osName .. " is not supported as remote file")
-    end
+function DpRemoteFile:new(url, path, fetch)
+	local o = {
+		url = url,
+		path = path,
+		_fetch = fetch
+	}
+	setmetatable(o, self)
+	self.__index = self
+	return o
 end
+
+function DpRemoteFile:load()
+	self._fetch(self)
+end
+
+return DpRemoteFile

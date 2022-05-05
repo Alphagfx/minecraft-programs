@@ -1,6 +1,3 @@
 --- @class Dependency
---- @field name string
-Dependency = {}
+--- @field public name string
 
-function Dependency:load()
-end
