@@ -31,9 +31,19 @@ end
 --- @return Dependency
 function tools.mdl(name, url)
 	url = url or tools.url .. name
-	return file:new(url, name, function(item)
-		util.wget(item.url, item.path)
-	end)
+	local fl = file:new(
+			url,
+			name,
+			function(item)
+				util.wget(item.url, item.path)
+			end
+	)
+	return module:new(
+			name,
+			function()
+				fl:load()
+			end
+	)
 end
 
 local setup = {
