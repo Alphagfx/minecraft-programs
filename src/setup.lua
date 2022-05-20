@@ -52,6 +52,19 @@ local setup = {
 			"setup",
 			{
 				tools.pckg(
+						"craft",
+						{
+							tools.mdl("craft/Inventory.lua"),
+							tools.mdl("craft/Item.lua"),
+							tools.mdl("craft/main.lua"),
+							tools.mdl("craft/Recipes.lua"),
+							tools.mdl("craft/setup.lua"),
+							tools.mdl("craft/Slot.lua"),
+							tools.mdl("craft/Transposer.lua"),
+							tools.mdl("craft/Util.lua"),
+						}
+				),
+				tools.pckg(
 						"dep",
 						{
 							tools.mdl("dep/Dependency.lua"),
