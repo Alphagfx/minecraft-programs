@@ -1,11 +1,11 @@
-local glutil = require("util")
+local settings = require("settings")
 
 local util = {}
 
 --- @param href string
 --- @param path string
 function util.wget(href, path)
-	local osName = glutil.osName()
+	local osName = settings.OS()
 	if osName == "Linux" then
 		util.fetchLinux(href, path)
 	elseif osName == "OpenOS" then
