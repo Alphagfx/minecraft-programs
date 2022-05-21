@@ -13,5 +13,6 @@ fetch("dep/DpRemoteFile.lua")
 fetch("dep/DpWrapper.lua")
 fetch("dep/util.lua")
 
+fetch("settings.lua")
 fetch("setup.lua")
 fetch("setup_simple_oc.lua")
