@@ -7,19 +7,19 @@ local DpPackage = {}
 --- @param deps table<number,Dependency>
 --- @return DpPackage
 function DpPackage:new(name, deps)
-	local o = {
-		name = name,
-		deps = deps
-	}
-	setmetatable(o, self)
-	self.__index = self
-	return o
+    local o = {
+        name = name,
+        deps = deps
+    }
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
 function DpPackage:load()
-	for _, dep in pairs(self.deps) do
-		dep:load()
-	end
+    for _, dep in pairs(self.deps) do
+        dep:load()
+    end
 end
 
 return DpPackage

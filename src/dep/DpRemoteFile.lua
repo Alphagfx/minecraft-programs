@@ -8,18 +8,18 @@ local DpRemoteFile = {}
 --- @param fetch function
 --- @return DpRemoteFile
 function DpRemoteFile:new(url, path, fetch)
-	local o = {
-		url = url,
-		path = path,
-		_fetch = fetch
-	}
-	setmetatable(o, self)
-	self.__index = self
-	return o
+    local o = {
+        url = url,
+        path = path,
+        _fetch = fetch
+    }
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
 function DpRemoteFile:load()
-	self._fetch(self)
+    self._fetch(self)
 end
 
 return DpRemoteFile

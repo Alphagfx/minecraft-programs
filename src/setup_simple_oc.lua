@@ -1,7 +1,7 @@
 local base_url = "https://raw.githubusercontent.com/Alphagfx/minecraft-programs/main/src/"
 
 local function fetch(path)
-	os.execute("wget -f " .. base_url .. path .. " " .. path)
+    os.execute("wget -f " .. base_url .. path .. " " .. path)
 end
 
 os.execute("rm -rf dep")
