@@ -1,10 +1,11 @@
 local base_url = "https://raw.githubusercontent.com/Alphagfx/minecraft-programs/main/src/"
 
 local function fetch(path)
-	os.execute("wget -f " .. base_url .. href .. " " .. path)
+	os.execute("wget -f " .. base_url .. path .. " " .. path)
 end
 
-
+os.execute("rm -rf dep")
+os.execute("mkdir dep")
 fetch("dep/Dependency.lua")
 fetch("dep/DpModule.lua")
 fetch("dep/DpPackage.lua")
