@@ -1,6 +1,6 @@
 local settings = {
     OS = function()
-        return "Linux"
+        return "OpenOS"
     end
 }
 
