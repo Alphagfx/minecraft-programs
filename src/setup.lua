@@ -26,24 +26,16 @@ function tools.pckg(name, deps)
     )
 end
 
+--- @param item DpRemoteFile
+local function fetch(item)
+    util.wget(item.url, item.path)
+end
+
 --- @param name string
 --- @param url string
 --- @return Dependency
 function tools.mdl(name, url)
-    url = url or tools.url .. name
-    local fl = file:new(
-        url,
-        name,
-        function(item)
-            util.wget(item.url, item.path)
-        end
-    )
-    return module:new(
-        name,
-        function()
-            fl:load()
-        end
-    )
+    return file:new(url or tools.url .. name, name, fetch)
 end
 
 local setup = {
